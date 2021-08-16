@@ -1,0 +1,26 @@
+{
+  "name": "todocheck-bot",
+  "version": "1.0.0",
+  "description": "Reopen references issues in TODOs if these are linked against closed issues",
+  "main": "dist/src/index.js",
+  "scripts": {
+    "start": "tsc && node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "todocheck",
+    "github-actions"
+  ],
+  "author": "Benjamin Sparks",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/express": "^4.16.1",
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.3"
+  },
+  "dependencies": {
+    "@actions/core": "^1.4.0",
+    "@actions/github": "^5.0.0",
+    "express": "^4.16.4"
+  }
+}
