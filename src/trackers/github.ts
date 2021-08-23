@@ -1,7 +1,6 @@
-import { context, getOctokit } from "@actions/github"
+import { getOctokit } from "@actions/github"
 import { GitHub } from "@actions/github/lib/utils";
-
-export const tag = "github";
+import * as core from "@actions/core";
 
 class GithubTracker implements Tracker {
     constructor(private octokit: InstanceType<typeof GitHub>, private metadata: { owner: string, repo: string }) {
@@ -43,6 +42,9 @@ class GithubTracker implements Tracker {
     }
 
     async reopenIssue(issue: Issue): Promise<Issue> {
+        if (issue.isOpen) {
+            throw new Error(`${issue} is already open!`)
+        }
         const resp = await this.octokit.request("PATCH /repos/{owner}/{repo}/issues/{issueNumber}", {
             ...this.metadata,
             issueNumber: issue.issueId,
@@ -65,20 +67,31 @@ class GithubTracker implements Tracker {
 }
 
 
-export const initGithubTracker = (input: { token: string }): GithubTracker => {
+export const initGithubTracker = (inputs: {
+    token: string,
+}): GithubTracker => {
     const repoEnvVar = process.env.GITHUB_REPOSITORY;
     if (repoEnvVar === undefined) {
-        throw "GITHUB_REPOSITORY environment variable must be set!";
+        throw new Error("GITHUB_REPOSITORY environment variable must be set!");
     }
 
     const [owner, repo] = repoEnvVar.split("/")
-    const octokit = getOctokit(input.token);
+    const octokit = getOctokit(inputs.token);
 
     return new GithubTracker(octokit, { owner, repo });
 }
 
 
-const makeIssueFromGithub = (githubIssue: { state: string, id: number }): Issue => {
+export const readInputsFromAction = (): Inputs => {
+    return {
+        token: core.getInput("token"),
+        issueRef: core.getInput("issue-number"),
+        todocheck: core.getInput("todocheck")
+    };
+}
+
+
+const makeIssueFromGithub = (githubIssue: { id: number, state: string }): Issue => {
     return {
         isOpen: githubIssue.state === "open",
         issueId: githubIssue.id.toString(10)

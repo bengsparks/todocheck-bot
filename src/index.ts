@@ -1,44 +1,43 @@
-/* import * as core from '@actions/core'; */
-import * as argparse from 'argparse'
-import *  as github from './trackers/github';
+import *  as github from "./trackers/github";
 
-const main = () => {
-    const namespace: argparse.Namespace = ((parameters: string[]) => {
-        const parser = new argparse.ArgumentParser({
-            prog: process.env.npm_package_name,
-            description: process.env.npm_package_description
-        });
 
-        parser.add_argument("-b", "--basepath", {
-            default: ".",
-            required: false,
-            help: "The path for the project. Defaults to current directory",
-        });
+const main = async () => {
+    const inputs: Inputs = (() => {
+        const i = process.env.GITHUB_REPOSITORY ? github.readInputsFromAction() : undefined;
+        if (!i) {
+            throw new Error("Unknown host!")
+        }
+        return i;
+    })();
 
-        parser.add_argument("-c", "--config", {
-            required: false,
-            help: "The project configuration file to use. Will use the one from the basepath if not specified",
-        });
 
-        parser.add_argument("-tr", "--tracker", {
-            choices: [github.tag],
-            required: true,
-            help: "Which issue tracker is used for this project"
-        });
+    const tracker = ((): Tracker => {
+        const t = process.env.GITHUB_REPOSITORY ? github.initGithubTracker(inputs) : undefined;
+        if (!t) {
+            throw new Error("Unknown host!")
+        }
+        return t;
+    })();
 
-        parser.add_argument("-tc", "--todocheck", {
-            required: true,
-            help: "Path to the todocheck binary"
-        });
+    // TODO: Support closing of multiple issues, e.g. when a Pull Request is merged
+    // TODO: and it references multiple relevant issues 
 
-        return parser.parse_args(parameters);
+    // For now, simple issue closing is supported
+    const issue = await tracker.getIssue(inputs.issueRef);
+    if (issue.isOpen) {
+        throw new Error(`Accidentally fired on an open issue! ${issue}`)
+    }
 
-    })(process.argv.slice(2));
+    // TODO: Execute todocheck here and capture output
 
-    const tr: string = namespace.tracker;
-    if (tr === github.tag) {
-        console.log("detected github")
+    const reopenedIssue = await tracker.reopenIssue(issue);
+    if (!reopenedIssue.isOpen) {
+        throw new Error(`Referenced issue is still closed! ${issue}`)
     }
 }
 
-main()
+main().then(() => {
+    console.log("Execution terminated successfully")
+}).catch((reason) => {
+    console.error(`${reason}`)
+})

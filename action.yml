@@ -1,0 +1,22 @@
+name: "todocheck-bot"
+description: "Reopen issues if there are TODOs that are linked against them still in the codebase"
+runs:
+  main: "dist/src/index.js" 
+  using: "node12"
+
+inputs:
+  token:
+    description: |-
+      Token used to authenticate with GitHub API. Default is built-in token but a personal access token may be used for organization or user projects.
+    default: ${{ github.token }}
+    required: false
+
+  issue-number:
+    description: |-
+      Number of the issue closed 
+    required: true
+
+  todocheck:
+    description: |-
+      Path to the todocheck binary
+    required: false

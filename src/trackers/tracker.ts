@@ -10,3 +10,9 @@ type Issue = {
     isOpen: boolean;
     issueId: string;
 };
+
+type Inputs = {
+    token: string,
+    issueRef: string
+    todocheck: string
+}
