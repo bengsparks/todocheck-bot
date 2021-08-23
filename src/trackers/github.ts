@@ -8,56 +8,51 @@ class GithubTracker implements Tracker {
     }
 
     async getIssue(issueId: string): Promise<Issue> {
-        return this.octokit.request("GET /repos/{owner}/{repo}/issues/{issueNumber}", {
+        const resp = await this.octokit.request("GET /repos/{owner}/{repo}/issues/{issueNumber}", {
             ...this.metadata,
             issueNumber: issueId
-        }).then((response) => {
-            if (response.status !== 200) {
-                return Promise.reject(response)
-            }
+        })
+        if (resp.status !== 200) {
+            throw resp;
+        }
 
-            return Promise.resolve(makeIssueFromGithub(response.data))
-        });
+        return makeIssueFromGithub(resp.data);
     }
 
     async getIssues(issueIds: string | string[]): Promise<Issue[]> {
         if (typeof issueIds === "string") {
-            return this.getIssue(issueIds).then((issue) => {
-                return Promise.resolve([issue]);
-            });
+            return [await this.getIssue(issueIds)]
         }
 
-        return this.octokit.request("GET /repos/{owner}/{repo}/issues", {
+        const resp = await this.octokit.request("GET /repos/{owner}/{repo}/issues", {
             ...this.metadata
-        }).then((response) => {
-            if (response.status !== 200) {
-                return Promise.reject(response);
-            }
-
-            const matchingIssues = response.data.filter((githubIssue) => {
-                const id: string = githubIssue.id.toString(10);
-                return issueIds.indexOf(id);
-            });
-            if (matchingIssues === undefined) {
-                return Promise.reject(response);
-            }
-
-            return Promise.resolve(matchingIssues.map(makeIssueFromGithub));
         });
+        if (resp.status !== 200) {
+            throw resp;
+        }
+
+        const matchingIssues = resp.data.filter((githubIssue) => {
+            const id: string = githubIssue.id.toString(10);
+            return issueIds.indexOf(id);
+        });
+        if (matchingIssues === undefined) {
+            throw resp;
+        }
+
+        return matchingIssues.map(makeIssueFromGithub);
     }
 
     async reopenIssue(issue: Issue): Promise<Issue> {
-        return this.octokit.request("PATCH /repos/{owner}/{repo}/issues/{issueNumber}", {
+        const resp = await this.octokit.request("PATCH /repos/{owner}/{repo}/issues/{issueNumber}", {
             ...this.metadata,
             issueNumber: issue.issueId,
             state: "open"
-        }).then((response) => {
-            if (response.status !== 200) {
-                return Promise.reject(response);
-            }
-
-            return Promise.resolve(makeIssueFromGithub(response.data))
         });
+        if (resp.status !== 200) {
+            throw resp;
+        }
+
+        return makeIssueFromGithub(resp.data);
     }
 
 
@@ -70,18 +65,16 @@ class GithubTracker implements Tracker {
 }
 
 
-export const initGithubTracker = async (input: { token: string }): Promise<GithubTracker> => {
-    return new Promise<GithubTracker>(() => {
-        const repoEnvVar = process.env.GITHUB_REPOSITORY;
-        if (repoEnvVar === undefined) {
-            return Promise.reject("GITHUB_REPOSITORY environment variable must be set!")
-        }
+export const initGithubTracker = (input: { token: string }): GithubTracker => {
+    const repoEnvVar = process.env.GITHUB_REPOSITORY;
+    if (repoEnvVar === undefined) {
+        throw "GITHUB_REPOSITORY environment variable must be set!";
+    }
 
-        const [owner, repo] = repoEnvVar.split("/")
-        const octokit = getOctokit(input.token);
+    const [owner, repo] = repoEnvVar.split("/")
+    const octokit = getOctokit(input.token);
 
-        return new GithubTracker(octokit, { owner, repo });
-    });
+    return new GithubTracker(octokit, { owner, repo });
 }
 
 
