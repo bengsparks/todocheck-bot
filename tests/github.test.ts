@@ -1,4 +1,3 @@
-import * as core from "@actions/core";
 import { initGithubTracker } from "../src/trackers/github";
 
 const token = process.env.GITHUB_TOKEN;
