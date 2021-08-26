@@ -1,5 +1,8 @@
-import *  as github from "./trackers/github";
+import * as util from "util";
+const exec = util.promisify(require('child_process').exec);
 
+import * as github from "./trackers/github";
+import { TodocheckOutput, parse, ParseResult } from "./todocheck";
 
 const main = async () => {
     const [inputs, tracker] = (() => {
@@ -28,6 +31,12 @@ const main = async () => {
     }
 
     // TODO: Execute todocheck here and capture output
+    const {stdout, _stderr} = await exec(`${inputs.todocheck} --format json`);
+    const output: ParseResult<TodocheckOutput> = parse(stdout);
+
+    if (!!output && output.hasError) {
+        throw output.error
+    }
 
     const reopenedIssue = await tracker.reopenIssue(issue);
     if (!reopenedIssue.isOpen) {
