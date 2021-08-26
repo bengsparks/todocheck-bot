@@ -4,22 +4,9 @@ const exec = util.promisify(require('child_process').exec);
 import * as github from "./trackers/github";
 import { TodocheckOutput, parse, ParseResult } from "./todocheck";
 
+
 const main = async () => {
-    const [inputs, tracker] = (() => {
-        let i: Inputs;
-        let t: Tracker;
-
-        if (process.env.GITHUB_REPOSITORY) {
-            i = github.readInputsFromAction();
-            t = github.initGithubTracker(i);
-        }
-
-        else {
-            throw new Error("Unknown host!")
-        }
-
-        return [i, t] as const;
-    })();
+    const [inputs, tracker] = inferInputsAndTracker();
 
     // TODO: Support closing of multiple issues, e.g. when a Pull Request is merged
     // TODO: and it references multiple relevant issues 
@@ -34,7 +21,7 @@ const main = async () => {
     const {stdout, _stderr} = await exec(`${inputs.todocheck} --format json`);
     const output: ParseResult<TodocheckOutput> = parse(stdout);
 
-    if (!!output && output.hasError) {
+    if (!output || output.hasError) {
         throw output.error
     }
 
@@ -42,10 +29,26 @@ const main = async () => {
     if (!reopenedIssue.isOpen) {
         throw new Error(`Referenced issue is still closed! ${issue}`)
     }
+};
+
+const inferInputsAndTracker = (): readonly [Inputs, Tracker] => {
+    let i: Inputs;
+    let t: Tracker;
+
+    if (process.env.GITHUB_REPOSITORY) {
+        i = github.readInputsFromAction();
+        t = github.initGithubTracker(i);
+    }
+
+    else {
+        throw new Error("Unknown host!")
+    }
+
+    return [i, t] as const;
 }
 
 main().then(() => {
     console.log("Execution terminated successfully")
 }).catch((reason) => {
     console.error(`${reason}`)
-})
+});
