@@ -6,7 +6,7 @@ import {
   Inputs, Issue, IssueComparator, Tracker,
 } from './tracker';
 
-const makeIssueFromGithub = (githubIssue: { id: number, state: string }): Issue => ({
+const makeIssueFromGithub = (githubIssue: { id: number | string, state: string }): Issue => ({
   isOpen: githubIssue.state === 'open',
   issueRef: githubIssue.id.toString(10),
 });
@@ -26,7 +26,7 @@ class GithubTracker implements Tracker {
       throw new Error(resp.toString());
     }
 
-    return makeIssueFromGithub(resp.data);
+    return makeIssueFromGithub({ id: issueId, state: resp.data.state });
   }
 
   async getIssues(issueIds: string | string[]): Promise<Issue[]> {
@@ -64,7 +64,7 @@ class GithubTracker implements Tracker {
       throw new Error(resp.toString());
     }
 
-    return makeIssueFromGithub(resp.data);
+    return makeIssueFromGithub({ id: issueId, state: resp.data.state });
   }
 
   async reopenIssues(issues: Issue | Issue[]): Promise<Issue[]> {
