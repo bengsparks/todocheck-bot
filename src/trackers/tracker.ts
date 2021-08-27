@@ -6,13 +6,15 @@ export interface Tracker {
   reopenIssues(issues: Issue | Issue[]): Promise<Issue[]>
 }
 
-export type Issue = {
-  isOpen: boolean;
-  issueId: string;
-};
+export interface Issue {
+  isOpen: boolean
+  issueRef: string
+}
+
+export type IssueComparator = (lhs: { issueRef: string }, rhs: { issueRef: string }) => number;
 
 export type Inputs = {
   token: string,
-  issueRef: string
+  issueRefs: string[]
   todocheck: string
 };

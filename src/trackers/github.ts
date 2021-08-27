@@ -2,11 +2,13 @@ import { getOctokit } from '@actions/github';
 import { GitHub } from '@actions/github/lib/utils';
 import * as core from '@actions/core';
 
-import { Inputs, Issue, Tracker } from './tracker';
+import {
+  Inputs, Issue, IssueComparator, Tracker,
+} from './tracker';
 
 const makeIssueFromGithub = (githubIssue: { id: number, state: string }): Issue => ({
   isOpen: githubIssue.state === 'open',
-  issueId: githubIssue.id.toString(10),
+  issueRef: githubIssue.id.toString(10),
 });
 
 class GithubTracker implements Tracker {
@@ -56,7 +58,7 @@ class GithubTracker implements Tracker {
     }
     const resp = await this.octokit.request('PATCH /repos/{owner}/{repo}/issues/{issueNumber}', {
       ...this.metadata,
-      issueNumber: issue.issueId,
+      issueNumber: issue.issueRef,
       state: 'open',
     });
     if (resp.status !== 200) {
@@ -90,6 +92,9 @@ export const initGithubTracker = (inputs: {
 
 export const readInputsFromAction = (): Inputs => ({
   token: core.getInput('token'),
-  issueRef: core.getInput('issue-number'),
+  issueRefs: core.getInput('issue-numbers').split(','),
   todocheck: core.getInput('todocheck'),
 });
+
+export const comparator: IssueComparator = (lhs: { issueRef: string; }, rhs: { issueRef: string; }):
+number => parseInt(lhs.issueRef, 10) - parseInt(rhs.issueRef, 10);

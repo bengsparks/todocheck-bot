@@ -11,9 +11,9 @@ inputs:
     default: ${{ github.token }}
     required: false
 
-  issue-number:
+  issue-numbers:
     description: |-
-      Number of the issue closed 
+      Numbers of the issues closed, separated by commas
     required: true
 
   todocheck:
