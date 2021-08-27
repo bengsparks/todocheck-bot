@@ -34,7 +34,6 @@ const main = async () => {
     throw new Error(`Accidentally fired on an open issue! ${issue}`);
   }
 
-  // TODO: Execute todocheck here and capture output
   const { stdout } = await exec(`${inputs.todocheck} --format json`);
   const output: ParseResult<Output> = parse(stdout);
 
