@@ -13,7 +13,7 @@ inputs:
 
   issue-numbers:
     description: |-
-      Numbers of the issues closed, separated by commas
+      Numbers of the issues closed, separated by commas and nothing else (',')
     required: true
 
   todocheck:
