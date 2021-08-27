@@ -64,7 +64,7 @@ class GithubTracker implements Tracker {
       throw new Error(resp.toString());
     }
 
-    return makeIssueFromGithub({ id: issueId, state: resp.data.state });
+    return makeIssueFromGithub({ id: issue.issueRef, state: resp.data.state });
   }
 
   async reopenIssues(issues: Issue | Issue[]): Promise<Issue[]> {
