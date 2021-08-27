@@ -7,7 +7,7 @@
     "start": "npm run build && node dist/src/index.js",
     "build": "tsc --build",
     "lint": "eslint . --ext .ts",
-    "test": "GITHUB_REPOSITORY=git@github.com:bengsparks/todocheck-bot.git jest --rootDir=tests"
+    "test": "jest --rootDir=tests"
   },
   "keywords": [
     "todocheck",
