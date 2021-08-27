@@ -2,32 +2,14 @@
 
 import * as util from 'util';
 
-import * as github from './trackers/github';
 import { ParseResult, Output, parse } from './todocheck';
-import {
-  Inputs, Issue, IssueComparator, Tracker,
-} from './trackers/tracker';
+import init from './trackers/factory';
+import { Issue } from './trackers/tracker';
 
 const exec = util.promisify(require('child_process').exec);
 
-const factory = (): { inputs: Inputs, tracker: Tracker, issueSorter: IssueComparator } => {
-  let inputs: Inputs;
-  let tracker: Tracker;
-  let issueSorter: IssueComparator;
-
-  if (process.env.GITHUB_REPOSITORY) {
-    inputs = github.readInputsFromAction();
-    tracker = github.initGithubTracker(inputs);
-    issueSorter = github.comparator;
-  } else {
-    throw new Error('Unknown host!');
-  }
-
-  return { inputs, tracker, issueSorter };
-};
-
 const main = async () => {
-  const { inputs, tracker, issueSorter } = factory();
+  const { inputs, tracker, issueSorter } = init();
 
   // TODO: Support closing of multiple issues, e.g. when a Pull Request is merged
   // TODO: and it references multiple relevant issues
