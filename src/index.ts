@@ -44,7 +44,7 @@ const main = async () => {
   // Execute todocheck on the codebase
   const { stdout } = await exec(`${inputs.todocheck} --format json`);
   const output: ParseResult<Output> = parse(stdout);
-  if (!output || output.hasError) {
+  if (output.hasError) {
     throw new Error(output.error);
   }
   const todocheckOutput = output.parsed!!;
