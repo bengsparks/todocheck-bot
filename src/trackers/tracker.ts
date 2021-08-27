@@ -11,7 +11,10 @@ export interface Issue {
   issueRef: string
 }
 
-export type IssueComparator = (lhs: { issueRef: string }, rhs: { issueRef: string }) => number;
+export type IssueComparator = (
+  lhs: { issueRef: string | number },
+  rhs: { issueRef: string | number }
+) => number;
 
 export type Inputs = {
   token: string,

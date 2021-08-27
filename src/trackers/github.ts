@@ -96,5 +96,15 @@ export const readInputsFromAction = (): Inputs => ({
   todocheck: core.getInput('todocheck'),
 });
 
-export const comparator: IssueComparator = (lhs: { issueRef: string; }, rhs: { issueRef: string; }):
-number => parseInt(lhs.issueRef, 10) - parseInt(rhs.issueRef, 10);
+export const comparator: IssueComparator = (
+  lhs: { issueRef: string | number; },
+  rhs: { issueRef: string | number; },
+): number => {
+  const li: number = typeof lhs.issueRef === 'string'
+    ? parseInt(lhs.issueRef, 10)
+    : lhs.issueRef;
+  const ri: number = typeof rhs.issueRef === 'string'
+    ? parseInt(rhs.issueRef, 10)
+    : rhs.issueRef;
+  return li - ri;
+};
