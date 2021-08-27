@@ -18,9 +18,9 @@ class GithubTracker implements Tracker {
   ) { }
 
   async getIssue(issueId: string): Promise<Issue> {
-    const resp = await this.octokit.request('GET /repos/{owner}/{repo}/issues/{issueNumber}', {
+    const resp = await this.octokit.rest.issues.get({
       ...this.metadata,
-      issueNumber: issueId,
+      issue_number: parseInt(issueId, 10),
     });
     if (resp.status !== 200) {
       throw new Error(resp.toString());
@@ -34,33 +34,32 @@ class GithubTracker implements Tracker {
       return [await this.getIssue(issueIds)];
     }
 
-    const resp = await this.octokit.request('GET /repos/{owner}/{repo}/issues', {
+    const issues: Issue[] = await Promise.all(issueIds.map(this.getIssue));
+
+    /* const resp = await this.octokit.request('GET /repos/{owner}/{repo}/issues', {
       ...this.metadata,
-    });
-    if (resp.status !== 200) {
-      throw new Error(resp.toString());
-    }
+    }); */
 
-    const matchingIssues = resp.data.filter((githubIssue) => {
-      const id: string = githubIssue.id.toString(10);
-      return issueIds.indexOf(id);
-    });
-    if (matchingIssues === undefined) {
-      throw new Error(resp.toString());
-    }
-
-    return matchingIssues.map(makeIssueFromGithub);
+    return issues
+      .filter((issue) => issueIds.includes(issue.issueRef));
   }
 
   async reopenIssue(issue: Issue): Promise<Issue> {
     if (issue.isOpen) {
       throw new Error(`${issue} is already open!`);
     }
-    const resp = await this.octokit.request('PATCH /repos/{owner}/{repo}/issues/{issueNumber}', {
+
+    const resp = await this.octokit.rest.issues.update({
+      ...this.metadata,
+      issue_number: parseInt(issue.issueRef, 10),
+      state: 'open',
+    });
+
+    /* const resp = await this.octokit.request('PATCH /repos/{owner}/{repo}/issues/{issueNumber}', {
       ...this.metadata,
       issueNumber: issue.issueRef,
       state: 'open',
-    });
+    }); */
     if (resp.status !== 200) {
       throw new Error(resp.toString());
     }
@@ -85,7 +84,8 @@ export const initGithubTracker = (inputs: {
   }
 
   const [owner, repo] = repoEnvVar.split('/');
-  const octokit = getOctokit(inputs.token);
+  console.log(owner, repo);
+  const octokit = getOctokit(inputs.token).rest;
 
   return new GithubTracker(octokit, { owner, repo });
 };
