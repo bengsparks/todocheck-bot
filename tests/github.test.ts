@@ -17,6 +17,6 @@ describe('Reopening issues in Github Tracker', () => {
   it(`should get a closed issue #${issueRef}`, async () => {
     const issue = await tracker.getIssue(issueRef);
     expect(issue.issueRef).toBe(issueRef);
-    expect(issue.isOpen).toBeTruthy();
+    expect(issue.isOpen).toBeFalsy();
   });
 });
