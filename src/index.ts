@@ -53,7 +53,7 @@ const main = async () => {
   const closedIssues: Issue[] = todocheckOutput
     .filter((issue, index) => inputs.issueRefs[index] === issue.issueRef)
     .map((issue) => ({ ...issue, issueRef: parseInt(issue.issueRef, 10) }))
-    .sort((i1, i2) => issueSorter(i1, i2))
+    .sort(issueSorter)
     .map((issue, index) => ({
       isOpen: trackerIssues[index].isOpen,
       issueRef: issue.issueRef.toString(),
@@ -62,7 +62,7 @@ const main = async () => {
   const reopenedIssues = await tracker.reopenIssues(closedIssues);
   const stillClosedIssues = reopenedIssues.filter((issue) => issue.isOpen);
   if (stillClosedIssues) {
-    throw new Error(`Referenced issue is still closed! ${trackerIssues}`);
+    throw new Error(`Referenced issue is still closed! ${stillClosedIssues}`);
   }
 };
 
