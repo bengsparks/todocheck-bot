@@ -85,9 +85,7 @@ export const initGithubTracker = (inputs: {
   }
 
   const [owner, repo] = repoEnvVar.split('/');
-  const octokit = getOctokit(inputs.token, {
-    baseUrl: process.env.GITHUB_BASE_URL ?? 'https://api.github.com',
-  });
+  const octokit = getOctokit(inputs.token);
 
   return new GithubTracker(octokit, { owner, repo });
 };
