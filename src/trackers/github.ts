@@ -84,7 +84,6 @@ export const initGithubTracker = (inputs: {
   }
 
   const [owner, repo] = repoEnvVar.split('/');
-  console.log(owner, repo);
   const octokit = getOctokit(inputs.token);
 
   return new GithubTracker(octokit, { owner, repo });
