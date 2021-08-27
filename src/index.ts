@@ -17,6 +17,7 @@ const main = async () => {
 
   // Sort issues for easy associating
   const trackerIssues: Issue[] = (await tracker.getIssues(inputs.issueRefs)).sort(issueSorter);
+  const trackerIssueRefs = trackerIssues.map((issue) => issue.issueRef);
 
   // Check if bot fired upon open issue by accident
   const openIssues = trackerIssues.filter((issue) => issue.isOpen);
@@ -34,7 +35,7 @@ const main = async () => {
 
   // Select issues marked by todocheck as closed
   const closedIssues: Issue[] = todocheckOutput
-    .filter((issue, index) => inputs.issueRefs[index] === issue.issueRef)
+    .filter((issue) => trackerIssueRefs.includes(issue.issueRef))
     .map((issue) => ({ ...issue, issueRef: parseInt(issue.issueRef, 10) }))
     .sort(issueSorter)
     .map((issue, index) => ({
