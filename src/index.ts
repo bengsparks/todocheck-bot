@@ -2,11 +2,12 @@
 
 import * as util from 'util';
 
+import { exec } from 'child_process';
 import { ParseResult, Output, parse } from './todocheck';
 import init from './trackers/factory';
 import { Issue } from './trackers/tracker';
 
-const exec = util.promisify(require('child_process').exec);
+const pExec = util.promisify(exec);
 
 const main = async () => {
   const { inputs, tracker, issueSorter } = init();
@@ -24,7 +25,7 @@ const main = async () => {
   }
 
   // Execute todocheck on the codebase
-  const { stdout } = await exec(`${inputs.todocheck} --format json`);
+  const { stdout } = await pExec(`${inputs.todocheck} --format json`);
   const output: ParseResult<Output> = parse(stdout);
   if (output.hasError) {
     throw new Error(output.error);
