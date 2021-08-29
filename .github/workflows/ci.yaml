@@ -18,3 +18,5 @@ jobs:
     - run: npm ci --include=dev
     - run: npm run build    
     - run: npm run test
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
