@@ -35,8 +35,8 @@ const main = async () => {
 
   // Select issues marked by todocheck as closed
   const closedIssues: Issue[] = todocheckOutput
-    .filter((issue) => trackerIssueRefs.includes(issue.issueRef))
-    .map((issue) => ({ ...issue, issueRef: parseInt(issue.issueRef, 10) }))
+    .filter((issue) => trackerIssueRefs.includes(issue.metadata.issueID))
+    .map((issue) => ({ ...issue, issueRef: parseInt(issue.metadata.issueID, 10) }))
     .sort(issueSorter)
     .map((issue, index) => ({
       isOpen: trackerIssues[index].isOpen,
