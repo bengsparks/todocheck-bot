@@ -9,28 +9,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: 12
-    
-    - run: npm ci --include=dev
-    - run: npm run build   
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 12
+      
+      - run: npm ci --include=dev
+      - run: npm run build   
 
-    - name: Execute todocheck-bot
-    - uses: ./
-      with: 
-        token: ${{ secrets.GITHUB_TOKEN }}
-        issue-numbers: github.event.issue.number
+      - name: Execute todocheck-bot
+      - uses: ./
+        with: 
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-numbers: github.event.issue.number
 
-    # Reclose testing issue
-    - if: github.event.issue.number == 2
-      name: Reopen testing issue
-      run: |-
-        curl -i -u username:$token
-          -X PATCH -H 'Accept: application/vnd.github.v3+json'
-          https://api.github.com/repos/bengsparks/todocheck-bot/issues/2
-          -d '{"state":"open"}'
-      env: 
-        token: ${{ secrets.GITHUB_TOKEN }}
+      # Reclose testing issue
+      - if: github.event.issue.number == 2
+        name: Reopen testing issue
+        run: |-
+          curl -i -u username:$token
+            -X PATCH -H 'Accept: application/vnd.github.v3+json'
+            https://api.github.com/repos/bengsparks/todocheck-bot/issues/2
+            -d '{"state":"open"}'
+        env: 
+          token: ${{ secrets.GITHUB_TOKEN }}
         
