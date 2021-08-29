@@ -27,9 +27,9 @@ jobs:
       - if: github.event.issue.number == 2
         name: Reopen testing issue
         run: |-
-          curl -i -u username:$token
-            -X PATCH -H 'Accept: application/vnd.github.v3+json'
-            https://api.github.com/repos/bengsparks/todocheck-bot/issues/2
+          curl -i -u username:$token \
+            -X PATCH -H 'Accept: application/vnd.github.v3+json' \
+            https://api.github.com/repos/bengsparks/todocheck-bot/issues/2 \
             -d '{"state":"open"}'
         env: 
           token: ${{ secrets.GITHUB_TOKEN }}
