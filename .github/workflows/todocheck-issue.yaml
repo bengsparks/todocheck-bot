@@ -1,0 +1,28 @@
+name: todocheck-bot
+
+on:
+  issues:
+    types: [closed]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: "Reopen issue if neccessary"
+      uses: ./
+      with: 
+        token: ${{ secrets.GITHUB_TOKEN }}
+        issue-numbers: github.event.issue.number
+
+    # Reclose testing issue
+    - if: github.event.issue.number == 2
+      name: "Close testing issue"
+      run: |-
+        curl -i -u username:$token
+          -X PATCH -H 'Accept: application/vnd.github.v3+json'
+          https://api.github.com/repos/bengsparks/todocheck-bot/issues/2
+          -d '{"state":"closed"}'
+      env: 
+        token: ${{ secrets.GITHUB_TOKEN }}
+      
