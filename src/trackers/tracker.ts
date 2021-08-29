@@ -19,5 +19,5 @@ export type IssueComparator = (
 export type Inputs = {
   token: string,
   issueRefs: string[]
-  todocheck: string
+  todocheck?: string
 };

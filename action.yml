@@ -20,3 +20,4 @@ inputs:
     description: |-
       Path to the todocheck binary
     required: false
+    default: todocheck
