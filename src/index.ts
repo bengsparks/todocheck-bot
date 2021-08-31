@@ -12,7 +12,7 @@ const pExec = util.promisify(exec);
 const main = async () => {
   const { inputs, tracker, issueSorter } = init();
 
-  // TODO 3: Support closing of multiple issues, e.g. when a Pull Request is
+  // TODO 5: Support closing of multiple issues, e.g. when a Pull Request is
   // merged and it references multiple relevant issues
 
   // Sort issues for easy associating
