@@ -5,7 +5,7 @@ on:
     types: [closed]
 
 jobs:
-  build:
+  todocheck-bot:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,7 +23,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-numbers: github.event.issue.number
 
-      # Reclose testing issue
+      # Reopen testing issue
       - if: github.event.issue.number == 2
         name: Reopen testing issue
         run: |-
