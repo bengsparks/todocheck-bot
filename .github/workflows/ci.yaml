@@ -3,10 +3,11 @@ name: CI
 on:
   push:
     branches: [main, update/workflows]
+    paths: [src/, ts/]
   pull_request:
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
 
     steps:
