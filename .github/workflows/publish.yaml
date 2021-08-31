@@ -12,6 +12,7 @@ jobs:
         uses: actions/checkout@v2
 
       - run: npm ci
+      - run: npm install @vercel/ncc convert-action
       - run: npm run deploy-build  
 
       - name: build and tag
