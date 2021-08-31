@@ -15,9 +15,9 @@ describe('Reopening issues in Github Tracker', () => {
 
   // TODO 2: This issue must stay open!
   const issueRef = '2';
-  it(`should get a closed issue #${issueRef}`, async () => {
+  it(`should get an open issue #${issueRef}`, async () => {
     const issue = await tracker.getIssue(issueRef);
     expect(issue.issueRef).toBe(issueRef);
-    expect(issue.isOpen).toBeFalsy();
+    expect(issue.isOpen).toBeTruthy();
   });
 });
