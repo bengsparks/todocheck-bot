@@ -11,6 +11,9 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
 
+      - run: npm ci
+      - run: npm run build  
+
       - name: build and tag
         uses: JasonEtco/build-and-tag-action@v2
         with:
