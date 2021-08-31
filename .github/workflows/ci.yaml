@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches: [main, update/workflows]
-    paths: [src/, ts/]
+    paths: [src/*, ts/*, .github/workflows/*.yaml]
   pull_request:
 
 jobs:
