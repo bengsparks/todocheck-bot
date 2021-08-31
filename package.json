@@ -1,11 +1,12 @@
 {
   "name": "todocheck-bot",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Reopen referenced issues in TODOs if these are linked against closed issues",
   "main": "dist/src/index.js",
   "scripts": {
     "start": "npm run build && node dist/src/index.js",
     "build": "tsc --build",
+		"deploy-build": "npx --yes @vercel/ncc build && npx --yes convert-action",
     "lint": "eslint . --ext .ts",
     "test": "jest --rootDir=tests"
   },
