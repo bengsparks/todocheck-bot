@@ -1,0 +1,7 @@
+origin: github.com/bengsparks/todocheck-bot
+issue_tracker: GITHUB
+auth:
+  type: apitoken
+ignored:
+  - node_modules/
+  - dist/
