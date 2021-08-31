@@ -12,8 +12,8 @@ const pExec = util.promisify(exec);
 const main = async () => {
   const { inputs, tracker, issueSorter } = init();
 
-  // TODO: Support closing of multiple issues, e.g. when a Pull Request is merged
-  // TODO: and it references multiple relevant issues
+  // TODO 3: Support closing of multiple issues, e.g. when a Pull Request is
+  // merged and it references multiple relevant issues
 
   // Sort issues for easy associating
   const trackerIssues: Issue[] = (await tracker.getIssues(inputs.issueRefs)).sort(issueSorter);

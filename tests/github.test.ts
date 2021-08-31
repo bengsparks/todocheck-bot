@@ -13,6 +13,7 @@ describe('Reopening issues in Github Tracker', () => {
     tracker = initGithubTracker({ token: token!! });
   });
 
+  // TODO 2: This issue must stay open!
   const issueRef = '2';
   it(`should get a closed issue #${issueRef}`, async () => {
     const issue = await tracker.getIssue(issueRef);
