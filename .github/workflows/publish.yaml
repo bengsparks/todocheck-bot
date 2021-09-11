@@ -11,6 +11,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
 
+      - run: echo "using $(npm --version)"
       - run: npm ci
       - run: npm install @vercel/ncc convert-action --no-save
       - run: npm run deploy-build
