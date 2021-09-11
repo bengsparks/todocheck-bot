@@ -19,7 +19,7 @@ const guard = (o: any): o is Output => !!o // Non-empty output
   && 'line' in o[0]
   && 'message' in o[0]
   && 'metadata' in o[0]
-  && 'issueID' in o[0];
+  && 'issueID' in o[0].metadata;
 
 export const parse = (output: string): ParseResult<Output> => {
   const parsed = JSON.parse(output);
