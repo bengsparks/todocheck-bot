@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Execute todocheck-bot
-        uses: actions/todocheck-bot
+        uses: bengsparks/todocheck-bot@v0.0.2
         with: 
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-numbers: github.event.issue.number
