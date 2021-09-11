@@ -17,7 +17,7 @@ jobs:
       - run: echo "using $(npm --version)"
       - run: npm ci
       - run: npm install @vercel/ncc convert-action --no-save
-      - run: npm run deploy-build
+      - run: npm run build && npm run deploy-build
 
       - name: build and tag
         uses: JasonEtco/build-and-tag-action@v2
