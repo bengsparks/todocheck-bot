@@ -3,9 +3,9 @@
 import * as util from 'util';
 
 import { exec } from 'child_process';
-import { ParseResult, Output, parse } from './todocheck';
-import init from './trackers/factory';
-import { Issue } from './trackers/tracker';
+import { ParseResult, Output, parse } from './lib/todocheck';
+import init from './lib/trackers/factory';
+import { Issue } from './lib/trackers/tracker';
 
 const pExec = util.promisify(exec);
 

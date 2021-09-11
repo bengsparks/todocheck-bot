@@ -1,5 +1,6 @@
 {
   "name": "todocheck-bot",
+  "private": "true",
   "version": "0.0.2",
   "description": "Reopen referenced issues in TODOs if these are linked against closed issues",
   "main": "dist/src/index.js",

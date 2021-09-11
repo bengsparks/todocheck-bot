@@ -1,5 +1,5 @@
-import { initGithubTracker } from '../src/trackers/github';
-import { Tracker } from '../src/trackers/tracker';
+import { initGithubTracker } from '../src/lib/trackers/github';
+import { Tracker } from '../src/lib/trackers/tracker';
 
 const token = process.env.GITHUB_TOKEN;
 
