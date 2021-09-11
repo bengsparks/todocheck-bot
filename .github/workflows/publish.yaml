@@ -7,9 +7,12 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+
     steps:
-      - name: checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
 
       - run: echo "using $(npm --version)"
       - run: npm ci
