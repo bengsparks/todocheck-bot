@@ -13,7 +13,7 @@ jobs:
 
       - run: npm ci
       - run: npm install @vercel/ncc convert-action
-      - run: npm run deploy-build  
+      - run: npm run deploy-build
 
       - name: build and tag
         uses: JasonEtco/build-and-tag-action@v2

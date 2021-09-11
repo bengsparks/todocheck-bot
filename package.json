@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run build && node dist/src/index.js",
     "build": "tsc --build",
-    "deploy-build": "npx @vercel/ncc build && npx convert-action",
+    "deploy-build": "npx --yes @vercel/ncc build && npx convert-action",
     "lint": "eslint . --ext .ts",
     "test": "jest --rootDir=tests"
   },
