@@ -26,7 +26,7 @@ const main = async () => {
   }
 
   // Execute todocheck on the codebase
-  const { stdout } = await pExec(`${inputs.todocheck ?? './todocheck'} --format json`);
+  const { stdout } = await pExec(`${inputs.todocheck} --format json`);
   const output: ParseResult<Output> = parse(stdout);
   if (output.hasError) {
     throw new Error(output.error);
