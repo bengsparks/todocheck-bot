@@ -3,9 +3,8 @@
   "private": "true",
   "version": "0.0.2",
   "description": "Reopen referenced issues in TODOs if these are linked against closed issues",
-  "main": "dist/src/index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "npm run build && node dist/src/index.js",
     "build": "tsc --build",
     "deploy-build": "npx --yes @vercel/ncc build src/index.ts -o dist && npx convert-action",
     "lint": "eslint . --ext .ts",
