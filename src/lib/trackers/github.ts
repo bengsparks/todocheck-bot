@@ -13,7 +13,7 @@ const makeIssueFromGithub = (githubIssue: { id: number | string, state: string }
 
 export class GithubTracker implements Tracker {
   constructor(
-    public octokit: InstanceType<typeof GitHub>,
+    private octokit: InstanceType<typeof GitHub>,
     private metadata: { owner: string, repo: string },
   ) { }
 
