@@ -4,7 +4,7 @@ export type Output = {
   line: number,
   message: string,
   metadata: {
-    issueID?: string
+    issueID: string
   }
 }[];
 

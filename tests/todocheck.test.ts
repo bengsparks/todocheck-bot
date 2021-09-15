@@ -2,7 +2,7 @@ import { Output, parse } from '../src/lib/todocheck';
 
 describe("parsing todocheck's JSON output", () => {
   it('all optional keys are present', () => {
-    const todocheck: Output = [
+    const input = JSON.stringify([
       {
         type: "Issue doesn't exist",
         filename: 'testing/scenarios/annotated_todos/main.go',
@@ -12,9 +12,7 @@ describe("parsing todocheck's JSON output", () => {
           issueID: 'J456',
         },
       },
-    ];
-
-    const input = JSON.stringify(todocheck);
+    ]);
     const output = parse(input);
     expect(output.hasError).toBeFalsy();
     expect(output.error).toBeUndefined();
@@ -22,7 +20,7 @@ describe("parsing todocheck's JSON output", () => {
   });
 
   it('optional keys missing', () => {
-    const todocheck: Output = [
+    const input = JSON.stringify([
       {
         type: 'Malformed todo',
         filename: 'matchers/php/todomatcher.go',
@@ -31,9 +29,7 @@ describe("parsing todocheck's JSON output", () => {
         metadata: {
         },
       },
-    ];
-
-    const input = JSON.stringify(todocheck);
+    ]);
     const output = parse(input);
     expect(output.hasError).toBeFalsy();
     expect(output.error).toBeUndefined();
