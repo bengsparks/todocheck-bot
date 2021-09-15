@@ -34,7 +34,7 @@ export class GithubTracker implements Tracker {
       return [await this.getIssue(issueIds)];
     }
 
-    const issues: Issue[] = await Promise.all(issueIds.map(this.getIssue));
+    const issues: Issue[] = await Promise.all(issueIds.map(this.getIssue, this));
 
     /* const resp = await this.octokit.request('GET /repos/{owner}/{repo}/issues', {
       ...this.metadata,
@@ -71,7 +71,7 @@ export class GithubTracker implements Tracker {
     // Github REST Api does not seem to support multiple issue updates,
     // so issue all requests and Promise.all
     const allIssues = !Array.isArray(issues) ? [issues] : issues;
-    return Promise.all(allIssues.map(this.reopenIssue));
+    return Promise.all(allIssues.map(this.reopenIssue, this));
   }
 }
 
