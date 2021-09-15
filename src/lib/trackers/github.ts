@@ -35,13 +35,7 @@ export class GithubTracker implements Tracker {
     }
 
     const issues: Issue[] = await Promise.all(issueIds.map(this.getIssue, this));
-
-    /* const resp = await this.octokit.request('GET /repos/{owner}/{repo}/issues', {
-      ...this.metadata,
-    }); */
-
-    return issues
-      .filter((issue) => issueIds.includes(issue.issueRef));
+    return issues;
   }
 
   async reopenIssue(issue: Issue): Promise<Issue> {

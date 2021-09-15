@@ -22,7 +22,7 @@ const main = async () => {
   // Check if bot fired upon open issue by accident
   const openIssues = trackerIssues.filter((issue) => issue.isOpen);
   if (openIssues) {
-    throw new Error(`Accidentally fired on an open issue! ${trackerIssues}`);
+    throw new Error(`Accidentally fired on an open issue! ${JSON.stringify(trackerIssues)}`);
   }
 
   // Execute todocheck on the codebase
@@ -46,7 +46,7 @@ const main = async () => {
   const reopenedIssues = await tracker.reopenIssues(closedIssues);
   const stillClosedIssues = reopenedIssues.filter((issue) => issue.isOpen);
   if (stillClosedIssues) {
-    throw new Error(`Referenced issue(s) are still closed! ${stillClosedIssues}`);
+    throw new Error(`Referenced issue(s) are still closed! ${JSON.stringify(stillClosedIssues)}`);
   }
 };
 
