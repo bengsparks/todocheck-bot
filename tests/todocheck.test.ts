@@ -1,4 +1,4 @@
-import { Output, parse } from '../src/lib/todocheck';
+import { parse } from '../src/lib/todocheck';
 
 describe("parsing todocheck's JSON output", () => {
   it('all optional keys are present', () => {
@@ -14,6 +14,7 @@ describe("parsing todocheck's JSON output", () => {
       },
     ]);
     const output = parse(input);
+
     expect(output.hasError).toBeFalsy();
     expect(output.error).toBeUndefined();
     expect(output.parsed).toBeDefined();
@@ -31,20 +32,21 @@ describe("parsing todocheck's JSON output", () => {
       },
     ]);
     const output = parse(input);
+
     expect(output.hasError).toBeFalsy();
     expect(output.error).toBeUndefined();
     expect(output.parsed).toBeDefined();
   });
 
   it('missing mandatory field', () => {
-    const input = `[
+    const input = JSON.stringify([
       {
-        "type": "Malformed todo",
-        "filename": "matchers/php/todomatcher.go",
-        "line": 61,
-        "message": "TODO should match pattern - TODO {task_id}:"
-      }
-    ]`;
+        type: 'Malformed todo',
+        filename: 'matchers/php/todomatcher.go',
+        line: 61,
+        message: 'TODO should match pattern - TODO {task_id}',
+      },
+    ]);
     const output = parse(input);
 
     expect(output.hasError).toBeTruthy();

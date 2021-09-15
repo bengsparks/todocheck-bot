@@ -12,8 +12,8 @@ const pExec = util.promisify(exec);
 const main = async () => {
   const { inputs, tracker, issueSorter } = init();
 
-  // TODO 5: Support closing of multiple issues, e.g. when a Pull Request is
-  // merged and it references multiple relevant issues
+  /* TODO 5: Support closing of multiple issues, e.g. when a Pull Request is
+  merged and it references multiple relevant issues */
 
   // Sort issues for easy associating
   const trackerIssues: Issue[] = (await tracker.getIssues(inputs.issueRefs)).sort(issueSorter);
@@ -46,7 +46,7 @@ const main = async () => {
   const reopenedIssues = await tracker.reopenIssues(closedIssues);
   const stillClosedIssues = reopenedIssues.filter((issue) => issue.isOpen);
   if (stillClosedIssues) {
-    throw new Error(`Referenced issue is still closed! ${stillClosedIssues}`);
+    throw new Error(`Referenced issue(s) are still closed! ${stillClosedIssues}`);
   }
 };
 

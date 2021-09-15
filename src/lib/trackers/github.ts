@@ -11,9 +11,9 @@ const makeIssueFromGithub = (githubIssue: { id: number | string, state: string }
   issueRef: githubIssue.id.toString(10),
 });
 
-class GithubTracker implements Tracker {
+export class GithubTracker implements Tracker {
   constructor(
-    private octokit: InstanceType<typeof GitHub>,
+    public octokit: InstanceType<typeof GitHub>,
     private metadata: { owner: string, repo: string },
   ) { }
 
