@@ -10,6 +10,11 @@ import { Issue } from './lib/trackers/tracker';
 const pExec = util.promisify(exec);
 
 const main = async () => {
+  const todocheckToken = process.env.TODOCHECK_AUTH_TOKEN;
+  if (!todocheckToken) {
+    throw new Error('Must pass TODOCHECK_AUTH_TOKEN environment variable to avoid rate limiting');
+  }
+
   const { inputs, tracker, issueSorter } = init();
 
   /* TODO 5: Support closing of multiple issues, e.g. when a Pull Request is
@@ -26,7 +31,9 @@ const main = async () => {
   }
 
   // Execute todocheck on the codebase
-  const { stdout } = await pExec(`${inputs.todocheck} --format json`);
+  const { stdout, stderr } = await pExec(`TODOCHECK_AUTH_TOKEN=${todocheckToken} ${inputs.todocheck} --format json`);
+  console.debug(`Captured output:\nstderr: ${stdout}\nstderr: ${stderr}`);
+
   const output: ParseResult<Output> = parse(stdout);
   if (output.hasError) {
     throw new Error(output.error);
