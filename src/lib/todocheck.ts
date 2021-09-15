@@ -1,10 +1,10 @@
 export type Output = {
   type: string,
   filename: string,
-  line: string,
+  line: number,
   message: string,
   metadata: {
-    issueID: string
+    issueID?: string
   }
 }[];
 
@@ -18,12 +18,12 @@ const guard = (o: any): o is Output => !!o // Non-empty output
   && 'filename' in o[0]
   && 'line' in o[0]
   && 'message' in o[0]
-  && 'metadata' in o[0]
-  && 'issueID' in o[0].metadata;
+  && 'metadata' in o[0];
 
 export const parse = (output: string): ParseResult<Output> => {
   const parsed = JSON.parse(output);
+
   return guard(parsed)
-    ? { parsed, hasError: false }
+    ? { parsed: parsed.filter((o) => o.metadata.issueID !== undefined), hasError: false }
     : { hasError: true, error: "Unable to parse todocheck's output" };
 };
