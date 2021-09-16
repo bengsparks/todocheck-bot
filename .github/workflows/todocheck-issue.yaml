@@ -17,8 +17,12 @@ jobs:
           curl -sSlL https://github.com/bengsparks/todocheck-bot/releases/download/v0.0.2/todocheck -o todocheck
           chmod +x todocheck
 
-      - name: Setup .todocheck.yaml and auth
+      - name: Setup .todocheck.yaml and auth if necessary
         run: |
+          if [[ -f .todocheck.yaml ]]; then 
+            rm .todocheck.yaml
+          fi
+
           echo "origin: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY" >> .todocheck.yaml
           echo "issue_tracker: GITHUB" >> .todocheck.yaml
           echo "auth:" >> .todocheck.yaml
