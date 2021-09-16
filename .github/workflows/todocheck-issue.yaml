@@ -23,8 +23,11 @@ jobs:
           echo "issue_tracker: GITHUB" >> .todocheck.yaml
           echo "auth:" >> .todocheck.yaml
           echo "    type: apitoken" >> .todocheck.yaml
+
+      - name: Status
+        run: |
+          ls -a1
           cat .todocheck.yaml
-          ls
 
       - name: Execute todocheck-bot
         uses: bengsparks/todocheck-bot@v0.0.2
