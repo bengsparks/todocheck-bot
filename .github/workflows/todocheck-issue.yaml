@@ -8,14 +8,14 @@ jobs:
   todocheck-bot:
     runs-on: ubuntu-latest
 
-    steps:
+    steps:      
+      - name: Fetch codebase
+        uses: actions/checkout@v2
+
       - name: Fetch todocheck binary
         run: |
           curl -sSlL https://github.com/bengsparks/todocheck-bot/releases/download/v0.0.2/todocheck -o todocheck
           chmod +x todocheck
-      
-      - name: Fetch codebase
-        uses: actions/checkout@v2
 
       - name: Setup .todocheck.yaml and auth
         run: |
