@@ -48,7 +48,7 @@ const main = async () => {
     }));
 
   const reopenedIssues = await tracker.reopenIssues(closedIssues);
-  const stillClosedIssues = reopenedIssues.filter((issue) => issue.isOpen);
+  const stillClosedIssues = reopenedIssues.filter((issue) => !issue.isOpen);
   if (stillClosedIssues.length > 0) {
     throw new Error(`Referenced issue(s) are still closed! ${JSON.stringify(stillClosedIssues)}`);
   }
