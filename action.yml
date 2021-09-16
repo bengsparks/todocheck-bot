@@ -18,7 +18,7 @@ inputs:
   todocheck:
     description: Path to the todocheck binary
     required: false
-    default: './todocheck'
+    default: ./todocheck
 branding:
   icon: alert-triangle
   color: red
