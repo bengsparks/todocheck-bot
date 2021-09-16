@@ -1,13 +1,9 @@
 /* eslint-disable no-console */
-
-import * as util from 'util';
-
-import { exec } from 'child_process';
-import { ParseResult, Output, parse } from './lib/todocheck';
+import {
+  ParseResult, Output, parse, captureTodocheckOutput,
+} from './lib/todocheck';
 import init from './lib/trackers/factory';
 import { Issue } from './lib/trackers/tracker';
-
-const pExec = util.promisify(exec);
 
 const main = async () => {
   const todocheckToken = process.env.TODOCHECK_AUTH_TOKEN;
@@ -31,8 +27,9 @@ const main = async () => {
   }
 
   // Execute todocheck on the codebase
-  const { stdout, stderr } = await pExec(`TODOCHECK_AUTH_TOKEN=${todocheckToken} ${inputs.todocheck} --format json`);
-  console.debug(`Captured output:\nstderr: ${stdout}\nstderr: ${stderr}`);
+  const stdout = await captureTodocheckOutput(
+    todocheckToken, inputs.todocheck ?? 'todocheck',
+  );
 
   const output: ParseResult<Output> = parse(stdout);
   if (output.hasError) {

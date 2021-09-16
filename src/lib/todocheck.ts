@@ -1,3 +1,8 @@
+import { exec } from 'child_process';
+import { promisify } from 'util';
+
+const pexec = promisify(exec);
+
 export type Output = {
   type: string,
   filename: string,
@@ -26,4 +31,27 @@ export const parse = (output: string): ParseResult<Output> => {
   return guard(parsed)
     ? { parsed: parsed.filter((o) => o.metadata.issueID !== undefined), hasError: false }
     : { hasError: true, error: "Unable to parse todocheck's output" };
+};
+
+const captureCodeAndStdout = (e: any): e is { code: number, stdout: string } => e
+    && e.code && typeof e.code === 'number'
+    && e.stdout && typeof e.stdout === 'string';
+
+export const captureTodocheckOutput = async (
+  todocheckAuthToken: string, todocheckPath: string,
+): Promise<string> => {
+  try {
+    const { stdout } = await pexec(`${todocheckPath} --format json`, {
+      env: { ...process.env, TODOCHECK_AUTH_TOKEN: todocheckAuthToken },
+    });
+    return stdout;
+  } catch (e) {
+    if (captureCodeAndStdout(e)) {
+      if (e.code >= 0 && e.code <= 2) {
+        return e.stdout;
+      }
+    }
+
+    throw new Error(`Error occurred: ${e}`);
+  }
 };

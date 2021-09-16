@@ -31,7 +31,6 @@ jobs:
       - name: Status
         run: |
           ls -a1
-          cat .todocheck.yaml
 
       - name: Execute todocheck-bot
         uses: bengsparks/todocheck-bot@v0.0.2
