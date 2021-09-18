@@ -11,7 +11,7 @@ const makeIssueFromGithub = (githubIssue: { id: number | string, state: string }
   issueRef: githubIssue.id.toString(10),
 });
 
-export class GithubTracker implements Tracker {
+class GithubTracker implements Tracker {
   constructor(
     private octokit: InstanceType<typeof GitHub>,
     private metadata: { owner: string, repo: string },
@@ -69,6 +69,11 @@ export class GithubTracker implements Tracker {
   }
 }
 
+/**
+ *
+ * @param inputs a token for authenticating against Github's REST API to avoid rate limiting
+ * @returns a tracker with methods interfacing with Github's API according to {@link Tracker}
+ */
 export const initGithubTracker = (inputs: {
   token: string,
 }): GithubTracker => {
@@ -83,6 +88,10 @@ export const initGithubTracker = (inputs: {
   return new GithubTracker(octokit, { owner, repo });
 };
 
+/**
+ *
+ * @returns the values passed to the bot from the workflow file
+ */
 export const readInputsFromAction = (): Inputs => ({
   token: core.getInput('token'),
   issueRefs: core.getInput('issue-numbers').split(','),

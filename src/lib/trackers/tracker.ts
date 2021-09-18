@@ -11,6 +11,14 @@ export interface Issue {
   issueRef: string
 }
 
+/**
+ * Facilitate comparing of issue refs for sorting purposes.
+ * Not all issue trackers store their issue refs as numbers, which is why strings are supported.
+ *
+ * @param lhs an issue number
+ * @param rhs an issue number
+ * @returns > 0 if lhs > rhs, == 0 if rhs == 0, otherwise < 0, i.e. lhs < rhs
+ */
 export type IssueComparator = (
   lhs: { issueRef: string | number },
   rhs: { issueRef: string | number }

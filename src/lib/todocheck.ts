@@ -3,6 +3,13 @@ import { promisify } from 'util';
 
 const pexec = promisify(exec);
 
+/**
+ * Todocheck's relevant JSON output format
+ *
+ * Note the usage of the word relevant; these attributes encompass all
+ * mandatory outputs and enforces the presence of the `issueID` attribute.
+ * Other todo errors, such as finding malformed todos, are therefore dropped.
+ */
 export type Output = {
   type: string,
   filename: string,
@@ -25,6 +32,11 @@ const guard = (o: any): o is Output => !!o // Non-empty output
   && 'message' in o[0]
   && 'metadata' in o[0];
 
+/**
+ * Parses
+ * @param output
+ * @returns
+ */
 export const parse = (output: string): ParseResult<Output> => {
   const parsed = JSON.parse(output);
 
@@ -34,8 +46,8 @@ export const parse = (output: string): ParseResult<Output> => {
 };
 
 const captureCodeAndStdout = (e: any): e is { code: number, stdout: string } => e
-    && e.code && typeof e.code === 'number'
-    && e.stdout && typeof e.stdout === 'string';
+  && e.code && typeof e.code === 'number'
+  && e.stdout && typeof e.stdout === 'string';
 
 export const captureTodocheckOutput = async (
   todocheckAuthToken: string, todocheckPath: string,

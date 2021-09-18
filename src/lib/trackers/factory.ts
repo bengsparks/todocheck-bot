@@ -1,6 +1,10 @@
 import { Inputs, IssueComparator, Tracker } from './tracker';
 import * as github from './github';
 
+/**
+ * @returns inputs, the tracker and a comparator for issues.
+ * @throws an error if the host cannot be detected.
+ */
 const init = (): { inputs: Inputs, tracker: Tracker, issueSorter: IssueComparator } => {
   let inputs: Inputs;
   let tracker: Tracker;

@@ -1,4 +1,4 @@
-import { GithubTracker, initGithubTracker } from '../src/lib/trackers/github';
+import { initGithubTracker } from '../src/lib/trackers/github';
 import { Tracker } from '../src/lib/trackers/tracker';
 
 const token = process.env.GITHUB_TOKEN;
@@ -11,11 +11,6 @@ describe('Reopening issues in Github Tracker', () => {
   let tracker: Tracker;
   it('should initialise Github tracker', () => {
     tracker = initGithubTracker({ token: token!! });
-  });
-
-  it('octokit must be defined', () => {
-    // eslint-disable-next-line @typescript-eslint/dot-notation
-    expect((tracker as GithubTracker)['octokit']).toBeDefined();
   });
 
   // TODO 2: This issue must stay open!
